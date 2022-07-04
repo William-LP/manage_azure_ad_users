@@ -31,11 +31,13 @@ module "users" {
 
 **internal.csv**
 ```
-first_name,last_name,department,job_title
-Michael,Scott,HeadOffice,Manager
-Jim,Halpert,Sales,Engineer
-Pam,Beesly,Sales,Engineer
+first_name,last_name,department,job_title,prefered_email
+Michael,Scott,HeadOffice,Manager,m.scott
+Jim,Halpert,Sales,Engineer,halpert-jim
+Pam,Beesly,Sales,Engineer,
 ```
+
+if no **prefered_email** is set user mail and UPN will be first.lastname@internal-domain.com
 
 **project/group_project1.csv**
 ```
