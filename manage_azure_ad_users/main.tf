@@ -33,8 +33,8 @@ locals {
 
 resource "azuread_user" "users" {
   for_each            = local.internal_users
-  user_principal_name = each.key
-  mail                = each.key
+  user_principal_name = each.value.prefered_email != "" ? format("%s@%s",each.value.prefered_email,var.internal_domain) : each.key
+  mail                = each.value.prefered_email != "" ? format("%s@%s",each.value.prefered_email,var.internal_domain) : each.key
   password = format(
     "%s%s%s!",
     replace(lower(each.value.last_name), " ", "-"),
@@ -71,9 +71,11 @@ resource "azuread_invitation" "guests" {
   for_each           = toset(local.guests_users)
   user_display_name  = each.key
   user_email_address = each.key
+  message {
+    language = "en-US"
+  }
   redirect_url       = "https://portal.azure.com"
 }
-
 
 resource "azuread_group" "projects" {
   for_each           = local.projects
@@ -82,3 +84,4 @@ resource "azuread_group" "projects" {
   assignable_to_role = true
   members            = [for binding in flatten(local.binding_pivot_table) : binding.uid if binding.project == each.key]
 }
+
